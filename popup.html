@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <style>
+        body {
+            width: 400px;
+            padding: 8px;
+            background-color: #fcfcfc;
+        }
+
+        #header {
+            margin-bottom: 10px;
+        }
+
+        #logo {
+            display: inline-block;
+            background-image: url(/images/logo.png);
+            background-size: 155px 30px;
+            width: 155px;
+            height: 30px;
+        }
+
+        #user {
+            float: right;
+            line-height: 30px;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2),
+               only screen and (-moz-min-device-pixel-ratio: 2),
+               only screen and (-o-min-device-pixel-ratio: 2),
+               only screen and (min-device-pixel-ratio: 2) {
+            #logo {
+                background-image: url(/images/logo@2x.png);
+            }
+       }
+    </style>
+    <script src="jquery.min.js"></script>
+    <script src="spin.min.js"></script>
+    <script src="popup.js"></script>
+    <script src="bootstrap.file-input.min.js"></script>
+</head>
+<body>
+    <div id="header">
+        <div id="logo"></div>
+        <div id="user">
+            <div class="not_signed_in" style="display:none">
+                <a id="sign_in" href="#">Sign in</a>
+            </div>
+        </div>
+    </div>
+    <div id="loading" style="height:40px;"></div>
+    <div id="content" style="display:none">
+        <div class="no_devices" style="display:none">
+            <p>No registered devices, to register a device <a id="play_store_link" href="#">install the Android app from the Play Store!</a></p>
+            <p>Already installed the app? Open it and log in with your Google account and you'll be good to go!</p>
+        </div>
+        <div class="not_signed_in" style="display:none">
+            <p>PushBullet makes it easy to push links, files, lists, notes, and more to your Android devices.</p>
+            <div style="margin-bottom:10px; margin-top:20px;text-align:center">
+                <a id="sign_up" class="btn btn-primary" href="#">Sign up on PushBullet.com &rarr;</a>
+            </div>
+        </div>
+        <div class="signed_in" style="display:none">
+            <div style="margin-bottom:10px">
+                <span style="line-height:30px;font-size:16px">Push to:&nbsp;&nbsp;</span><select id="devices" style="width:300px"></select>
+            </div>
+            <div id="push_link">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a class="tab_link" href="#">Link</a></li>
+                        <li><a class="tab_note" href="#">Note</a></li>
+                        <li><a class="tab_list" href="#">List</a></li>
+                        <li><a class="tab_file" href="#">File</a></li>
+                    </ul>
+                </div>
+                <div class='clearfix' style="padding-left:20px;padding-right:20px">
+                    <div class="controls">
+                        <input id="link_title" class="input-block-level" type="text" placeholder="Link title">
+                    </div>
+                    <div class="controls">
+                        <input id="link_url" class="input-block-level" type="text" placeholder="Link url">
+                    </div>
+                    <div class="pull-right" style="margin-top:10px">
+                        <a id="push_link_submit" class="btn btn-primary" href="#">Push It!</a>
+                    </div>
+                </div>
+            </div>
+            <div id="push_note" style="display:none">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li><a class="tab_link" href="#">Link</a></li>
+                        <li class="active"><a class="tab_note" href="#">Note</a></li>
+                        <li><a class="tab_list" href="#">List</a></li>
+                        <li><a class="tab_file" href="#">File</a></li>
+                    </ul>
+                </div>
+                <div class='clearfix' style="padding-left:20px;padding-right:20px">
+                    <div class="controls">
+                        <input id="note_title" class="input-block-level" type="text" placeholder="Note title">
+                    </div>
+                    <div class="controls">
+                        <textarea id="note_body" class="input-block-level" rows="6" placeholder="Note text"></textarea>
+                    </div>
+                    <div class="pull-right" style="margin-top:10px">
+                        <a id="push_note_submit" class="btn btn-primary" href="#">Push It!</a>
+                    </div>
+                </div>
+            </div>
+            <div id="push_list" style="display:none">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li><a class="tab_link" href="#">Link</a></li>
+                        <li><a class="tab_note" href="#">Note</a></li>
+                        <li class="active"><a class="tab_list" href="#">List</a></li>
+                        <li><a class="tab_file" href="#">File</a></li>
+                    </ul>
+                </div>
+                <div class='clearfix' style="padding-left:20px;padding-right:20px">
+                    <div class="controls">
+                        <input id="list_title" class="input-block-level" type="text" placeholder="List title">
+                    </div>
+                    <hr style='margin-top:10px'>
+                    <div id='item_container'>
+                        <div class="controls">
+                            <input class="input-block-level" type="text" placeholder="List item" name="items[]">
+                        </div>
+                        <div class="controls">
+                            <input class="input-block-level" type="text" placeholder="List item" name="items[]">
+                        </div>
+                        <div class="controls">
+                            <input class="input-block-level" type="text" placeholder="List item" name="items[]">
+                        </div>
+                    </div>
+                    <a id='btn_add_item' href='#'>Add item</a>
+                    <div class="pull-right" style="margin-top:10px">
+                        <a id="push_list_submit" class="btn btn-primary" href="#">Push It!</a>
+                    </div>
+                </div>
+            </div>
+            <div id="push_file" style="display:none">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li><a class="tab_link" href="#">Link</a></li>
+                        <li><a class="tab_note" href="#">Note</a></li>
+                        <li><a class="tab_list" href="#">List</a></li>
+                        <li class="active"><a class="tab_file" href="#">File</a></li>
+                    </ul>
+                </div>
+                <div class='clearfix' style="padding-left:20px;padding-right:20px;padding-bottom:10px">
+                    <a id="push_file_submit" href="#">Go to PushBullet.com to send files &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
