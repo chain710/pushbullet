@@ -1,45 +1,33 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
-
-    "manifest_version": 2,
-    "name": "PushBullet",
-    "version": "1.2",
-    "description": "PushBullet enables you to easily push webpages, files, notes, lists, and more to your Android devices from your browser.",
-    "icons": {
-        "16": "images/icon_16.png",
-        "48": "images/icon_48.png",
-        "128": "images/icon_128.png" },
-    "homepage_url": "https://www.pushbullet.com",
-    "minimum_chrome_version": "23",
-    "permissions": [
-        "tabs", "contextMenus",
-        "http://localhost:5000/*",
-        "https://www.pushbullet.com/*"
-    ],
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-    "browser_action": {
-        "default_icon": {
-            "19": "images/icon_19.png",
-            "38": "images/icon_38.png"
-        },
-        "default_title": "PushBullet",
-        "default_popup": "popup.html"
-    },
-    "content_scripts": [
-        {
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
-            "js": [
-                "content_script.js"
-            ],
-            "run_at": "document_end"
-        }
-    ],
-    "background": {
-        "scripts": [
-            "background.js"
-        ]
-    }
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "19": "images/icon_19.png",
+         "38": "images/icon_38.png"
+      },
+      "default_popup": "popup.html",
+      "default_title": "PushBullet"
+   },
+   "content_scripts": [ {
+      "js": [ "content_script.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_end"
+   } ],
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+   "description": "PushBullet enables you to easily push webpages, files, notes, lists, and more to your Android devices from your browser.",
+   "homepage_url": "https://www.pushbullet.com",
+   "icons": {
+      "128": "images/icon_128.png",
+      "16": "images/icon_16.png",
+      "48": "images/icon_48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKyWCIbMIUOs36oTwHVQjwECLV/PTT6Q9ZdSNv4ZpEa+HpUf9p+ymPICoIUru44Q4onwrBH+hllZi/p7SVhawEXW8YQDr4d7UINJIsHlvnDh9MdHGBRrZEDWGZVg84HEVqGdJ0n35G6BMrTYKOtZTj3uYa9FpUSrGLPW2sKSuTPQIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "23",
+   "name": "PushBullet",
+   "permissions": [ "tabs", "contextMenus", "http://*/*", "https://*/*", "http://localhost:5000/*", "https://www.pushbullet.com/*" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.3"
 }

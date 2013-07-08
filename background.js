@@ -80,6 +80,44 @@ function sendPush(push, done) {
     xhr.send(JSON.stringify(push));
 }
 
+function get_basename(url) {
+    return url.substring(url.lastIndexOf('/') + 1);
+}
+
+function sendFilePush(push, url, done) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', host + '/api/pushes', true);
+    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(localStorage.api_key + ':'));
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                done();
+            } else {
+                onError();
+            }
+        }
+    };
+    
+    var img_downloader = new XMLHttpRequest();
+    img_downloader.open('GET', url, true);
+    img_downloader.responseType = 'blob';
+    img_downloader.onload = function(e) {
+        if (img_downloader.status == 200) {
+            var fd = new FormData();
+            for (var k in push) {
+                fd.append(k, push[k]);
+            }
+            
+            console.log(img_downloader.response)
+            fd.append('file', img_downloader.response, get_basename(url));
+            xhr.send(fd);
+        }
+    };
+    
+    img_downloader.send(null);
+}
+
 function getPageInfo(done) {
     if (activePort != undefined) {
         activePort.onMessage.addListener(function(message) {
@@ -143,6 +181,11 @@ function updateContextMenus(response) {
                                            , 'onclick': function(info, tab) {
                                                 sendPush({ 'type': 'note', 'device_id': deviceId, 'title': 'Selection', 'body': info.selectionText }, function() { });
                                            }});
+                chrome.contextMenus.create({ 'title': 'Push this image to my ' + deviceName
+                                           , 'contexts': ['image']
+                                           , 'onclick': function(info, tab) {
+                                                sendFilePush({ 'type': 'file', 'device_id': deviceId }, info.srcUrl, function() { });
+                                           }});
             })(device.id);
         }
 
@@ -170,6 +213,11 @@ function updateContextMenus(response) {
                                            , 'contexts': ['selection']
                                            , 'onclick': function(info, tab) {
                                                 sendPush({ 'type': 'note', 'device_id': deviceId, 'title': 'Selection', 'body': info.selectionText }, function() { });
+                                           }});
+                chrome.contextMenus.create({ 'title': 'Push this image to my ' + device.owner_name + '\'s ' + deviceName
+                                           , 'contexts': ['image']
+                                           , 'onclick': function(info, tab) {
+                                                sendFilePush({ 'type': 'file', 'device_id': deviceId }, info.srcUrl, function() { });
                                            }});
             })(device.id);
         }
